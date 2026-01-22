@@ -36,7 +36,7 @@ jobs:
           sudo apt update
           sudo apt install -y build-essential gcc-aarch64-linux-gnu bc flex bison \
           7zip kmod bash cpio binutils tar git wget dpkg libssl-dev clang llvm lld \
-          libelf-dev python3 rsync
+          libelf-dev python3 rsync debhelper-compat libdw-dev
       
       # 设置 ccache 缓存
       - name: 设置 ccache
@@ -76,7 +76,7 @@ jobs:
       
       # 列出编译产物
       - name: 列出编译产物
-        run: ls -la *.deb
+        run: ls -la *.deb sm8150-xiaomi-raphael.dtb || true
       
       # 创建 GitHub Release 并上传编译产物
       - name: 创建 Release 并上传产物
@@ -92,7 +92,11 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            *.deb
+            linux-image-xiaomi-raphael.deb
+            linux-headers-xiaomi-raphael.deb
+            firmware-xiaomi-raphael.deb
+            alsa-xiaomi-raphael.deb
+            sm8150-xiaomi-raphael.dtb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
@@ -102,6 +106,5 @@ jobs:
         with:
           name: kernel-packages-v${{ inputs.kernel_version }}
           path: |
-            linux-xiaomi-raphael.deb
-            firmware-xiaomi-raphael.deb
-            alsa-xiaomi-raphael.deb
+            *.deb
+            sm8150-xiaomi-raphael.dtb

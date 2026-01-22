@@ -75,7 +75,8 @@ sed -i '/ConditionKernelVersion/d' rootdir/lib/systemd/system/pd-mapper.service
 
 # 复制并安装内核包（从预下载的目录）
 cp xiaomi-raphael-debs_$1/*-xiaomi-raphael.deb rootdir/tmp/
-chroot rootdir dpkg -i /tmp/linux-xiaomi-raphael.deb
+chroot rootdir dpkg -i /tmp/linux-image-xiaomi-raphael.deb
+chroot rootdir dpkg -i /tmp/linux-headers-xiaomi-raphael.deb
 chroot rootdir dpkg -i /tmp/firmware-xiaomi-raphael.deb
 rm rootdir/tmp/*-xiaomi-raphael.deb
 chroot rootdir update-initramfs -c -k all
@@ -208,7 +209,8 @@ wget https://github.com/GengWei1997/kernel-deb/releases/download/v1.0.0/xiaomi-k
 mount -o loop xiaomi-k20pro-boot.img boot_tmp
 
 # 复制 boot 文件
-cp -r rootdir/boot/dtbs/qcom boot_tmp/dtbs/
+mkdir -p boot_tmp/dtbs/qcom
+cp xiaomi-raphael-debs_$1/sm8150-xiaomi-raphael.dtb boot_tmp/dtbs/qcom/
 cp rootdir/boot/config-* boot_tmp/
 cp rootdir/boot/initrd.img-* boot_tmp/initramfs
 cp rootdir/boot/vmlinuz-* boot_tmp/linux.efi

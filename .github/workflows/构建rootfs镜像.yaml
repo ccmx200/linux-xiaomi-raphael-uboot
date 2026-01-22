@@ -82,11 +82,18 @@ jobs:
           echo "正在下载内核包 (版本: ${{ env.KERNEL_VERSION }})..."
           
           # 下载通用内核包
-          curl -L -o xiaomi-raphael-debs_${{ env.KERNEL_VERSION }}/linux-xiaomi-raphael.deb \
-            "https://github.com/${{ github.repository }}/releases/download/kernel-v${{ env.KERNEL_VERSION }}/linux-xiaomi-raphael.deb" || echo "下载 linux-xiaomi-raphael.deb 失败，可能 Release 不存在"
+          curl -L -o xiaomi-raphael-debs_${{ env.KERNEL_VERSION }}/linux-image-xiaomi-raphael.deb \
+            "https://github.com/${{ github.repository }}/releases/download/kernel-v${{ env.KERNEL_VERSION }}/linux-image-xiaomi-raphael.deb" || echo "下载 linux-image-xiaomi-raphael.deb 失败，可能 Release 不存在"
+          
+          curl -L -o xiaomi-raphael-debs_${{ env.KERNEL_VERSION }}/linux-headers-xiaomi-raphael.deb \
+            "https://github.com/${{ github.repository }}/releases/download/kernel-v${{ env.KERNEL_VERSION }}/linux-headers-xiaomi-raphael.deb" || echo "下载 linux-headers-xiaomi-raphael.deb 失败，可能 Release 不存在"
           
           curl -L -o xiaomi-raphael-debs_${{ env.KERNEL_VERSION }}/firmware-xiaomi-raphael.deb \
             "https://github.com/${{ github.repository }}/releases/download/kernel-v${{ env.KERNEL_VERSION }}/firmware-xiaomi-raphael.deb" || echo "下载 firmware-xiaomi-raphael.deb 失败，可能 Release 不存在"
+          
+          # 下载设备树文件 dtb
+          curl -L -o xiaomi-raphael-debs_${{ env.KERNEL_VERSION }}/sm8150-xiaomi-raphael.dtb \
+            "https://github.com/${{ github.repository }}/releases/download/kernel-v${{ env.KERNEL_VERSION }}/sm8150-xiaomi-raphael.dtb" || echo "下载 sm8150-xiaomi-raphael.dtb 失败，可能 Release 不存在"
           
           # Desktop版本需要额外的alsa包
           if [[ "${{ env.SYSTEM_TYPE }}" == *"desktop"* ]]; then
@@ -99,7 +106,7 @@ jobs:
           ls -la xiaomi-raphael-debs_${{ env.KERNEL_VERSION }}/ || echo "目录为空"
           
           # 检查必要文件是否存在
-          if [ ! -f "xiaomi-raphael-debs_${{ env.KERNEL_VERSION }}/linux-xiaomi-raphael.deb" ]; then
+          if [ ! -f "xiaomi-raphael-debs_${{ env.KERNEL_VERSION }}/linux-image-xiaomi-raphael.deb" ]; then
             echo "错误: 必要的内核包未下载成功"
             exit 1
           fi
