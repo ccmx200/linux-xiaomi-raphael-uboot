@@ -20,6 +20,9 @@ mount -o loop rootfs.img rootdir
 # debootstrap生成镜像
 debootstrap --arch=arm64 $DEBIAN_VERSION rootdir https://mirrors.tuna.tsinghua.edu.cn/debian/
 
+# 挂载boot
+mount -o loop xiaomi-k20pro-boot.img rootdir/boot
+
 # 绑定系统目录
 mount --bind /dev rootdir/dev
 mount --bind /dev/pts rootdir/dev/pts
@@ -153,20 +156,9 @@ echo "PasswordAuthentication yes" | tee -a rootdir/etc/ssh/sshd_config
 # 清理 apt 缓存
 chroot rootdir apt clean
 
-# 生成 boot 镜像
-mkdir -p boot_tmp
-wget https://github.com/GengWei1997/kernel-deb/releases/download/v1.0.0/xiaomi-k20pro-boot.img
-mount -o loop xiaomi-k20pro-boot.img boot_tmp
-
-# 复制 boot 文件
-mkdir -p boot_tmp/dtbs/qcom
-cp xiaomi-raphael-debs_$2/sm8150-xiaomi-raphael.dtb boot_tmp/dtbs/qcom/
-cp rootdir/boot/config-* boot_tmp/
-cp rootdir/boot/initrd.img-* boot_tmp/initramfs
-cp rootdir/boot/vmlinuz-* boot_tmp/linux.efi
-
-umount boot_tmp
-rm -d boot_tmp
+# 重命名 boot 文件
+mv rootdir/boot/initrd.img-* rootdir/boot/initramfs
+mv rootdir/boot/vmlinuz-* rootdir/boot/linux.efi
 
 # 删除 wifi 证书
 rm -f rootdir/lib/firmware/reg*
@@ -176,6 +168,7 @@ umount rootdir/sys
 umount rootdir/proc
 umount rootdir/dev/pts
 umount rootdir/dev
+umount rootdir/boot
 umount rootdir
 
 rm -d rootdir

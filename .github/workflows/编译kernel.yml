@@ -76,7 +76,7 @@ jobs:
       
       # 列出编译产物
       - name: 列出编译产物
-        run: ls -la *.deb sm8150-xiaomi-raphael.dtb || true
+        run: ls -la *.deb || true
       
       # 创建 GitHub Release 并上传编译产物
       - name: 创建 Release 并上传产物
@@ -96,7 +96,6 @@ jobs:
             linux-headers-xiaomi-raphael.deb
             firmware-xiaomi-raphael.deb
             alsa-xiaomi-raphael.deb
-            sm8150-xiaomi-raphael.dtb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
@@ -107,4 +106,3 @@ jobs:
           name: kernel-packages-v${{ inputs.kernel_version }}
           path: |
             *.deb
-            sm8150-xiaomi-raphael.dtb

@@ -91,9 +91,10 @@ jobs:
           curl -L -o xiaomi-raphael-debs_${{ env.KERNEL_VERSION }}/firmware-xiaomi-raphael.deb \
             "https://github.com/${{ github.repository }}/releases/download/kernel-v${{ env.KERNEL_VERSION }}/firmware-xiaomi-raphael.deb" || echo "下载 firmware-xiaomi-raphael.deb 失败，可能 Release 不存在"
           
-          # 下载设备树文件 dtb
-          curl -L -o xiaomi-raphael-debs_${{ env.KERNEL_VERSION }}/sm8150-xiaomi-raphael.dtb \
-            "https://github.com/${{ github.repository }}/releases/download/kernel-v${{ env.KERNEL_VERSION }}/sm8150-xiaomi-raphael.dtb" || echo "下载 sm8150-xiaomi-raphael.dtb 失败，可能 Release 不存在"
+          # 下载xiaomi-k20pro-boot.img
+          curl -L -o xiaomi-k20pro-boot.img \curl -L -o xiaomi-k20pro-boot.img \
+            "https://github.com/GengWei1997/kernel-deb/releases/download/v1.0.0/xiaomi-k20pro-boot.img" \
+            || echo "下载 xiaomi-k20pro-boot.img 失败，可能 Release 不存在"
           
           # Desktop版本需要额外的alsa包
           if [[ "${{ env.SYSTEM_TYPE }}" == *"desktop"* ]]; then
@@ -253,5 +254,5 @@ jobs:
         run: |
           echo "清理临时文件..."
           sudo rm -f rootfs.img rootfs.7z xiaomi-k20pro-boot.img 2>/dev/null || true
-          sudo rm -rf rootdir boot_tmp 2>/dev/null || true
+          sudo rm -rf rootdir 2>/dev/null || true
           rm -rf xiaomi-raphael-debs_* 2>/dev/null || true
